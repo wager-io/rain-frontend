@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+
+:root {
+  --primary-bg: #1a1a2e; /* Dark background color */
+  --footer-bg: #25253e; /* Dark background color */
+  --secondary-bg: #21213e; /* Slightly lighter background for cards/sections */
+  --tertiary-bg: #2a2a42; /* Even lighter background for elevated elements */
+  --tertiary-bg1: #2a2a42a4; /* Even lighter background for elevated elements */
+  --accent-purple: #6a0dad; /* Purple for highlights/active states */
+  --accent-purple-light: #8a2dd4; /* Lighter purple for hover states */
+  --accent-purple-dark: #4a0988; /* Darker purple for pressed states */
+  --text-light: #e0e0e0; /* Light text color */
+  --text-medium: #c0c0c0; /* Medium text color for secondary content */
+  --text-dark: #b8c1e8; /* Slightly darker text for secondary info */
+  --text-muted: #808080; /* Muted text for inactive states */
+  --success-green: #00e676; /* Green for positive indicators/success */
+  --border-color: #3a3a5a; /* Border color for separation */
+  --border-light: #4a4a6a; /* Lighter border for subtle separations */
+  --hover-bg: #2d2d48; /* Background for hover states */
+  --active-bg: #383862; /* Background for active states */
+  --shadow-dark: rgba(0, 0, 0, 0.3); /* Dark shadow for depth */
+  --shadow-purple: rgba(106, 13, 173, 0.2); /* Purple shadow for accents */
+  --chart-line: #8884d8; /* Line color for charts (purple hue) */
+  --chart-fill: #6a0dad50; /* Fill color for charts (purple with transparency) */
+}
+
+body{
+    padding: 0;
+    margin: 0;
+    background: var(--primary-bg);
+    font-family: sans-serif, "Nunito", "Poppins", "Montserrat", "Roboto";
+    color: var(--text-light);
+}
+button{
+  cursor: pointer;
+}
+
+::-webkit-scrollbar{
+  display: none;
+}
