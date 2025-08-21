@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import AllBets from './AllBets';
-import MyBets from './MyBets';
+import AllBets from './tabs/AllBets';
+import MyBets from './tabs/Mybets';
 
 export default function UsersBetLayout() {
   const [activeTab, setActive] = useState("all")
