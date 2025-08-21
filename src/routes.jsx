@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { Navigate } from 'react-router';
 import LandingPage from './pages/home/LandingPage';
+import ComingSoon from './pages/sport/Index';
 
 
 const NotFound = lazy(() => import('./pages/404/NotFound'));
@@ -14,13 +15,13 @@ export const routes = [
     showInNav: true,
     protected: false,
   },
-  // {
-  //   path: '/dashboard',
-  //   element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
-  //   name: 'Dashboard',
-  //   showInNav: true,
-  //   protected: true,
-  // },
+  {
+    path: '/sport',
+    element: <ComingSoon />,
+    name: 'Dashboard',
+    showInNav: true,
+    protected: true,
+  },
   // {
   //   path: '/users',
   //   element: <ProtectedRoute> <Users /> </ProtectedRoute>,

@@ -39,3 +39,17 @@ button{
 ::-webkit-scrollbar{
   display: none;
 }
+
+ div::-webkit-scrollbar {
+    width: 4px;
+  }
+  div::-webkit-scrollbar-track {
+    background-color: var(--primary-bg);
+  }
+  div::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 2px;
+  }
+  div::-webkit-scrollbar-thumb:hover {
+    background-color: var(--accent-purple);
+  }

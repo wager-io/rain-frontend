@@ -102,13 +102,13 @@ export default function FaqSection() {
   ];
 
   return (
-    <div className="py-8 bg-[#1a2c38]">
+    <div className="py-8 ">
       <div className="container mx-auto px-4">
         {/* Section Title with Icon */}
         <div className="flex items-center mb-6">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-blue-500 mr-2"
+            className="h-5 w-5 text-[var(--accent-purple)] mr-2"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -127,7 +127,7 @@ export default function FaqSection() {
         {faqItems.map((item) => (
           <div className="w-full mb-3" key={item.id}>
             <div
-              className="bg-[rgb(33,55,67)] rounded-lg p-4 shadow-md cursor-pointer transition-all duration-300 hover:bg-[#213d4d]"
+              className="bg-[var(--secondary-bg)] rounded-lg p-4 shadow-md cursor-pointer transition-all duration-300 hover:bg-[var(--tertiary-bg)]"
               onClick={() => toggleCard(item.id)}
             >
               <div className="flex justify-between items-center">

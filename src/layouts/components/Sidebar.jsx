@@ -196,22 +196,6 @@ export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = fals
           boxShadow: isMobile ? '0 0 20px var(--shadow-dark)' : '2px 0 8px var(--shadow-dark)'
         }}
       >
-        <style jsx>{`
-          div::-webkit-scrollbar {
-            width: 4px;
-          }
-          div::-webkit-scrollbar-track {
-            background-color: var(--primary-bg);
-          }
-          div::-webkit-scrollbar-thumb {
-            background-color: var(--border-color);
-            border-radius: 2px;
-          }
-          div::-webkit-scrollbar-thumb:hover {
-            background-color: var(--accent-purple);
-          }
-        `}</style>
-
         <div className="py-3">
           {/* First Section - Main Navigation */}
           <div className="mb-6">

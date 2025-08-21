@@ -3,6 +3,8 @@ import { FcGoogle } from 'react-icons/fc'
 const BetsTable = lazy(() => import('../../components/betsTable/Layout'));
 import axios from "axios"
 import InhouseGames from './sections/InHouseGames';
+import RecentWins from '../../components/casino/RecentWins';
+import FaqSection from './sections/FaqSection';
 
 export default function LandingPage() {
 
@@ -157,10 +159,14 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
-
+    <RecentWins />
       <InhouseGames />
 
+  
+
       <BetsTable />
+
+      <FaqSection />     
     </div>
   )
 }

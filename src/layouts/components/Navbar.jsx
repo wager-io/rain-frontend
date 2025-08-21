@@ -1,13 +1,24 @@
 import React, { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { FiSearch, FiGift, FiMessageCircle, FiAlignLeft, FiX, FiGlobe, FiChevronRight } from 'react-icons/fi'
 import { languageData } from '../../constants/countries'
 import { US, ES, FR, PT, CN, TR } from 'country-flag-icons/react/3x2'
 
 export default function Navbar({ sidebarOpen = true, onToggleSidebar, isDesktop = true,chatOpen= false , onToggleChat }) {
-  const [activeTab, setActiveTab] = useState('Casino')
+  const navigate = useNavigate()
+  const location = useLocation()
   const [chatSectionOpen, setChatSectionOpen] = useState(false)
   const [languageOpen, setLanguageOpen] = useState(false)
   const [activeLanguage, setActiveLanguage] = useState('English')
+
+  // Determine active tab based on current route
+  const getActiveTab = () => {
+    if (location.pathname === '/casino') return 'Casino'
+    if (location.pathname === '/sport') return 'Sport'
+    return null
+  }
+
+  const activeTab = getActiveTab()
 
   // Create flag components mapping
   const flagComponents = { US, ES, FR, PT, CN, TR }
@@ -67,7 +78,7 @@ export default function Navbar({ sidebarOpen = true, onToggleSidebar, isDesktop 
                 }}
               >
                 <button 
-                  onClick={() => setActiveTab('Casino')}
+                  onClick={() => navigate('/casino')}
                   className={`min-w-[70px] px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                     activeTab === 'Casino' ? 'scale-95' : 'scale-100'
                   } hover:scale-100`}
@@ -95,7 +106,7 @@ export default function Navbar({ sidebarOpen = true, onToggleSidebar, isDesktop 
                 </button>
                 
                 <button 
-                  onClick={() => setActiveTab('Sport')}
+                  onClick={() => navigate('/sport')}
                   className={`min-w-[70px] px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                     activeTab === 'Sport' ? 'scale-95' : 'scale-100'
                   } hover:scale-100`}
@@ -132,7 +143,8 @@ export default function Navbar({ sidebarOpen = true, onToggleSidebar, isDesktop 
             <img 
               src="/assets/logo.png" 
               alt="Brand Logo" 
-              className="h-12 w-auto"
+              className="h-12 w-auto cursor-pointer hover:scale-105 transition-transform duration-200"
+              onClick={() => navigate('/')}
             />
           </div>
 

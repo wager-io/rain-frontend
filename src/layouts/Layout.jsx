@@ -1,7 +1,8 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import { lazy, useState, useEffect } from 'react';
+import { lazy, useState, useEffect, Suspense } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { routes } from '../routes';
+import Preloader from '../components/loader/Preloader';
 
 const Footer = lazy(() => import('./components/Footer'));
 const Navbar = lazy(() => import('./components/Navbar'));
@@ -64,28 +65,30 @@ const Layout = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-secondary-900 text-grey">
-       <Navbar 
-         sidebarOpen={sidebarOpen} 
-         onToggleSidebar={toggleSidebar} 
-         onToggleChat={toggleChat}
-         chatOpen={chatOpen}
-         isDesktop={isDesktop}
-       />
-       {(isDesktop || mobileSidebarOpen) && <Sidebar isDesktop={isDesktop} isMobile={isMobile} sidebarOpen={isDesktop ? sidebarOpen : true} />}
-       <PublicChats isOpen={chatOpen}  onToggleChat={toggleChat}  isDesktop={isDesktop} isMobile={isMobile} />
-      <main 
-        className={`mx-auto px-0 sm:px-1 py-0 pt-16 `}
-        style={{
-          paddingLeft: isDesktop && (sidebarOpen ? '250px' : '75px'),
-          paddingBottom: !isDesktop ? '50px' : '0',
-          transition: 'padding 0.3s ease-in-out',
-          paddingRight: chatOpen && isDesktop ? "320px" : "0"
-        }}
-      >
-        <Outlet />
-        <Footer />
-      </main>
-      {!isDesktop && <NavBottomTabs onToggleSidebar={toggleSidebar} onToggleChat={toggleChat} isDesktop={isDesktop} />}
+      <Suspense fallback={<Preloader />}>
+        <Navbar 
+          sidebarOpen={sidebarOpen} 
+          onToggleSidebar={toggleSidebar} 
+          onToggleChat={toggleChat}
+          chatOpen={chatOpen}
+          isDesktop={isDesktop}
+        />
+        {(isDesktop || mobileSidebarOpen) && <Sidebar isDesktop={isDesktop} isMobile={isMobile} sidebarOpen={isDesktop ? sidebarOpen : true} />}
+        <PublicChats isOpen={chatOpen}  onToggleChat={toggleChat}  isDesktop={isDesktop} isMobile={isMobile} />
+        <main 
+          className={`mx-auto px-0 sm:px-1 py-0 pt-16 `}
+          style={{
+            paddingLeft: isDesktop && (sidebarOpen ? '250px' : '75px'),
+            paddingBottom: !isDesktop ? '50px' : '0',
+            transition: 'padding 0.3s ease-in-out',
+            paddingRight: chatOpen && isDesktop ? "320px" : "0"
+          }}
+        >
+          <Outlet />
+          <Footer />
+        </main>
+        {!isDesktop && <NavBottomTabs onToggleSidebar={toggleSidebar} onToggleChat={toggleChat} isDesktop={isDesktop} />}
+      </Suspense>
     </div>
   );
 };

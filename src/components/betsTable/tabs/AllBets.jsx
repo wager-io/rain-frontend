@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { FiChevronUp, FiChevronDown, FiZap, FiEyeOff, FiHexagon, FiTarget } from 'react-icons/fi'
 
 export default function AllBets() {
-  // Dummy data for the table
-  const betsData = [
+  // Initial dummy data for the table
+  const initialBetsData = [
     { 
       id: 1,
       game: 'Aviator', 
@@ -86,6 +86,59 @@ export default function AllBets() {
     }
   ]
 
+  const [betsData, setBetsData] = useState(initialBetsData)
+  const [nextId, setNextId] = useState(11)
+  const [isNewBetAdding, setIsNewBetAdding] = useState(false)
+
+  // Sample data for generating new bets
+  const gameOptions = ['Aviator', 'Sweet Bonanza', 'Gates of Olympus', 'Crash', 'Mines', 'Plinko', 'Blackjack', 'Book of Dead', 'Dice', 'Roulette']
+  const userOptions = ['WinStreak', 'BetMaster', 'LuckyGamer', 'CryptoWin', 'GameChanger', 'RiskTaker', 'BigBaller', 'WagerKing', 'BetBeast', 'Hidden']
+  
+  // Function to generate a new bet
+  const generateNewBet = () => {
+    const randomGame = gameOptions[Math.floor(Math.random() * gameOptions.length)]
+    const randomUser = userOptions[Math.floor(Math.random() * userOptions.length)]
+    const randomBetAmount = parseFloat((Math.random() * 50 + 1).toFixed(2))
+    const isWin = Math.random() > 0.4 // 60% chance of winning
+    const randomMultiplier = isWin ? (Math.random() * 5 + 1).toFixed(2) + 'x' : '0.00x'
+    const payout = isWin ? parseFloat((randomBetAmount * parseFloat(randomMultiplier)).toFixed(2)) : 0.00
+
+    return {
+      id: nextId,
+      game: randomGame,
+      user: randomUser,
+      betAmount: randomBetAmount,
+      multiplier: randomMultiplier,
+      payout: payout
+    }
+  }
+
+  // Function to add new bet at the top
+  const addNewBet = () => {
+    setIsNewBetAdding(true)
+    const newBet = generateNewBet()
+    setBetsData(prevBets => {
+      const updatedBets = [newBet, ...prevBets]
+      // Keep only the latest 10 bets
+      return updatedBets.slice(0, 10)
+    })
+    setNextId(prev => prev + 1)
+    
+    // Reset animation state after animation completes
+    setTimeout(() => {
+      setIsNewBetAdding(false)
+    }, 500)
+  }
+
+  // Simulate new bets coming in
+  useEffect(() => {
+    const interval = setInterval(() => {
+      addNewBet()
+    }, 3000) // Add new bet every 3 seconds
+
+    return () => clearInterval(interval)
+  }, [nextId])
+
   // Icon switch based on game name
   const getGameIcon = (gameName) => {
     switch (gameName.toLowerCase()) {
@@ -138,20 +191,22 @@ export default function AllBets() {
         </div>
 
         {/* Table Body */}
-        <div className="" >
+        <div className="overflow-hidden" >
           {betsData.map((bet, index) => {
             const GameIcon = getGameIcon(bet.game)
-            const isCardRow = index % 2 === 0 // First, third, fifth... rows are cards
+            const isCardRow = (bet.id + 1) % 2 === 0 // Use bet.id to maintain consistent pattern
             
             return (
               <div
                 key={bet.id}
-                className={`grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4 transition-all duration-200  ${
-                  isCardRow ? 'rounded-lg mx-2 my-2 border ' : ' my-2 mx-2'
-                }`}
+                className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4 transition-all duration-300 ease-in-out ${
+                  isCardRow ? 'rounded-lg mx-2 my-2 border' : 'my-2 mx-2'
+                } ${index === 0 && isNewBetAdding ? 'animate-slide-down' : ''}`}
                 style={{ 
                   backgroundColor: isCardRow ? 'var(--tertiary-bg)' : 'transparent',
-                    borderColor: isCardRow ? 'var(--border-color)' : ""
+                  borderColor: isCardRow ? 'var(--border-color)' : "",
+                  transform: index === 0 && isNewBetAdding ? 'translateY(-100%)' : 'translateY(0)',
+                  opacity: index === 0 && isNewBetAdding ? 0 : 1
                 }}
                 onMouseEnter={(e) => {
                   if (isCardRow) {
@@ -257,6 +312,29 @@ export default function AllBets() {
           </p>
         </div>
       </div>
+      
+      {/* CSS Animations */}
+      <style jsx>{`
+        @keyframes slideDown {
+          0% {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          100% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        
+        .animate-slide-down {
+          animation: slideDown 0.5s ease-out forwards;
+        }
+        
+        /* Ensure all rows shift down smoothly when new bet is added */
+        .overflow-hidden > div {
+          transition: transform 0.3s ease-in-out;
+        }
+      `}</style>
     </div>
   )
 }
