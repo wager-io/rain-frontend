@@ -1,10 +1,13 @@
 import { lazy } from 'react';
 import { Navigate } from 'react-router';
-import LandingPage from './pages/home/LandingPage';
-import ComingSoon from './pages/sport/Index';
 
 
 const NotFound = lazy(() => import('./pages/404/NotFound'));
+const LandingPage = lazy(() => import('./pages/home/LandingPage'));
+const ComingSoon = lazy(() => import('./pages/sport/Index'));
+const CasinoIndex = lazy(() => import('./pages/casino/Index'));
+const Favourite = lazy(() => import('./pages/Favourite/Index'));
+const Recents = lazy(() => import('./pages/recent/Index'));
 
 
 export const routes = [
@@ -18,17 +21,32 @@ export const routes = [
   {
     path: '/sport',
     element: <ComingSoon />,
-    name: 'Dashboard',
+    name: 'Sport',
     showInNav: true,
     protected: true,
   },
-  // {
-  //   path: '/users',
-  //   element: <ProtectedRoute> <Users /> </ProtectedRoute>,
-  //   name: 'Users',
-  //   showInNav: true,
-  //   protected: true,
-  // },
+  {
+    path: '/casino',
+    element: <CasinoIndex /> ,
+    name: 'Casino',
+    showInNav: true,
+    protected: true,
+  },
+  {
+    path: '/favourite',
+    element: <Favourite /> ,
+    name: 'Favourite',
+    showInNav: true,
+    protected: true,
+  },
+
+    {
+    path: '/recent',
+    element: <Recents /> ,
+    name: 'Favourite',
+    showInNav: true,
+    protected: true,
+  },
   //   {
   //   path: '/login',
   //   element: <Login />,

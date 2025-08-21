@@ -152,11 +152,17 @@ function InhouseGames() {
                   onClick={() => handleGameClick(game.path)}
                 >
                   <div>
-                    <img 
-                      src={game.image} 
-                      alt={game.title} 
-                      className="w-[150px] h-[200px] object-cover rounded-[12px]"
-                    />
+                    <div className='rounded-[12px]'
+                        style={{ 
+                        backgroundColor: 'var(--tertiary-bg)',
+                        border: '1px solid var(--border-color)',
+                      }} >
+                      <img 
+                        src={game.image} 
+                        alt={game.title} 
+                        className="w-[150px] h-[200px] object-cover rounded-[12px]"
+                      />
+                    </div>
                   </div>
                 </div>
               </SwiperSlide>

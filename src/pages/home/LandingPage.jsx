@@ -159,7 +159,7 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
-    <RecentWins />
+      <RecentWins />
       <InhouseGames />
 
   

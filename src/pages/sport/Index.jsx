@@ -6,9 +6,6 @@ import {
   FaBaseballBall, 
   FaHockeyPuck, 
   FaGolfBall,
-  FaTwitter,
-  FaFacebook,
-  FaInstagram
 } from 'react-icons/fa';
 
 export default function ComingSoon() {

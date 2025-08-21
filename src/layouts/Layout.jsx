@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import { lazy, useState, useEffect, Suspense } from 'react';
+import { FiMessageCircle } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { routes } from '../routes';
 import Preloader from '../components/loader/Preloader';
@@ -9,6 +10,7 @@ const Navbar = lazy(() => import('./components/Navbar'));
 const Sidebar = lazy(() => import('./components/Sidebar'));
 const NavBottomTabs = lazy(() => import('./components/NavBottomTabs'));
 const PublicChats = lazy(() => import('./public-chat/PublicChats'));
+const LiveSupport = lazy(() => import('../modals/live-support/Index'));
 
 const Layout = () => {
   const { user } = useAuth();
@@ -18,6 +20,7 @@ const Layout = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [liveSupportOpen, setLiveSupportOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -63,6 +66,10 @@ const Layout = () => {
     setChatOpen(!chatOpen);
   };
 
+  const toggleLiveSupport = () => {
+    setLiveSupportOpen(!liveSupportOpen);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-secondary-900 text-grey">
       <Suspense fallback={<Preloader />}>
@@ -73,7 +80,7 @@ const Layout = () => {
           chatOpen={chatOpen}
           isDesktop={isDesktop}
         />
-        {(isDesktop || mobileSidebarOpen) && <Sidebar isDesktop={isDesktop} isMobile={isMobile} sidebarOpen={isDesktop ? sidebarOpen : true} />}
+        {(isDesktop || mobileSidebarOpen) && <Sidebar isDesktop={isDesktop} isMobile={isMobile} sidebarOpen={isDesktop ? sidebarOpen : true} onToggleLiveSupport={toggleLiveSupport} />}
         <PublicChats isOpen={chatOpen}  onToggleChat={toggleChat}  isDesktop={isDesktop} isMobile={isMobile} />
         <main 
           className={`mx-auto px-0 sm:px-1 py-0 pt-16 `}
@@ -84,9 +91,31 @@ const Layout = () => {
             paddingRight: chatOpen && isDesktop ? "320px" : "0"
           }}
         >
+           
           <Outlet />
+          
           <Footer />
         </main>
+
+        {/* Live Support Button */}
+        <button
+          onClick={toggleLiveSupport}
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg z-[1999] transition-all duration-300 hover:scale-110 active:scale-95"
+          style={{
+            background: 'linear-gradient(135deg, var(--accent-purple), #8b5cf6)',
+            boxShadow: '0 4px 20px rgba(106, 13, 173, 0.4)'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.boxShadow = '0 6px 25px rgba(106, 13, 173, 0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.boxShadow = '0 4px 20px rgba(106, 13, 173, 0.4)';
+          }}
+        >
+          <FiMessageCircle className="w-6 h-6 text-white m-auto" />
+        </button>
+
+        {liveSupportOpen && <LiveSupport onClose={() => setLiveSupportOpen(false)} />}
         {!isDesktop && <NavBottomTabs onToggleSidebar={toggleSidebar} onToggleChat={toggleChat} isDesktop={isDesktop} />}
       </Suspense>
     </div>

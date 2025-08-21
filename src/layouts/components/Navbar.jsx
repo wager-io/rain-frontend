@@ -13,7 +13,7 @@ export default function Navbar({ sidebarOpen = true, onToggleSidebar, isDesktop 
 
   // Determine active tab based on current route
   const getActiveTab = () => {
-    if (location.pathname === '/casino') return 'Casino'
+    if (location.pathname != '/sport' ) return 'Casino'
     if (location.pathname === '/sport') return 'Sport'
     return null
   }

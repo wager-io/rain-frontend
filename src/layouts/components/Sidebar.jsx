@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { 
   FiHome, FiHeart, FiClock, FiStar, FiChevronDown, FiChevronRight,
   FiGift, FiHeadphones, FiGlobe, FiZap, FiSquare, FiTriangle,
@@ -7,12 +8,18 @@ import {
 import { languageData } from '../../constants/countries'
 import { US, ES, FR, PT, CN, TR } from 'country-flag-icons/react/3x2'
 
-export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = false }) {
+export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = false, onToggleLiveSupport }) {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [casinoOpen, setCasinoOpen] = useState(false)
   const [originalsOpen, setOriginalsOpen] = useState(false)
   const [languageOpen, setLanguageOpen] = useState(false)
-  const [activeLink, setActiveLink] = useState('Home')
   const [activeLanguage, setActiveLanguage] = useState('English')
+
+  // Determine active link based on current route
+  const isLinkActive = (path) => {
+    return location.pathname === path
+  }
 
   // Create flag components mapping
   const flagComponents = { US, ES, FR, PT, CN, TR }
@@ -28,7 +35,7 @@ export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = fals
     { name: 'Home', icon: <FiHome />, path: '/' },
     { name: 'Favourite', icon: <FiHeart />, path: '/favourite' },
     { name: 'Recently Played', icon: <FiClock />, path: '/recent' },
-    { name: 'New Releases', icon: <FiStar />, path: '/new' }
+    // { name: 'New Releases', icon: <FiStar />, path: '/new' }
   ]
 
   // Casino dropdown items
@@ -51,8 +58,8 @@ export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = fals
     { name: 'Limbo', icon: <FiTarget />, path: '/originals/limbo' }
   ]
 
-  const handleLinkClick = (linkName) => {
-    setActiveLink(linkName)
+  const handleLinkClick = (path) => {
+    navigate(path)
   }
 
   const handleLanguageSelect = (language) => {
@@ -61,12 +68,12 @@ export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = fals
   }
 
   const renderNavItem = (item, onClick, isSubItem = false) => {
-    const isActive = activeLink === item.name
+    const isActive = isLinkActive(item.path)
     
     return (
       <div
         key={item.name}
-        onClick={() => onClick && onClick(item.name)}
+        onClick={() => onClick && onClick(item.path)}
         className={`cursor-pointer py-3 mx-2 my-1 rounded-lg min-h-[44px] transition-all duration-200 border-l-4 flex items-center ${
           sidebarOpen ? 'px-0' : 'px-0'
         } ${isActive ? 'border-l-4' : 'border-l-4'}`}
@@ -125,6 +132,56 @@ export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = fals
                 New
               </span>
             )}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const renderButtonItem = (item, onClick, isSubItem = false) => {
+    return (
+      <div
+        key={item.name}
+        onClick={onClick}
+        className={`cursor-pointer py-3 mx-2 my-1 rounded-lg min-h-[44px] transition-all duration-200 border-l-4 flex items-center ${
+          sidebarOpen ? 'px-0' : 'px-0'
+        }`}
+        style={{
+          background: 'transparent',
+          boxShadow: 'none',
+          borderLeftColor: 'transparent'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.backgroundColor = 'var(--hover-bg)'
+          e.target.style.borderLeftColor = 'var(--accent-purple-light)'
+          e.target.style.boxShadow = '0 4px 12px var(--shadow-purple), 0 2px 4px var(--shadow-dark)'
+          e.target.style.transform = 'translateX(4px)'
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.backgroundColor = 'transparent'
+          e.target.style.borderLeftColor = 'transparent'
+          e.target.style.boxShadow = 'none'
+          e.target.style.transform = 'translateX(0)'
+        }}
+      >
+        <div 
+          className="flex items-center justify-center w-12 h-4 text-lg transition-all duration-200"
+          style={{ 
+            color: 'var(--text-medium)'
+          }}
+        >
+          {item.icon}
+        </div>
+        {sidebarOpen && (
+          <div className="flex items-center gap-2">
+            <span 
+              className={`${isSubItem ? 'text-xs' : 'text-sm'} font-normal`}
+              style={{ 
+                color: 'var(--text-medium)'
+              }}
+            >
+              {item.name}
+            </span>
           </div>
         )}
       </div>
@@ -218,55 +275,58 @@ export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = fals
                 className="py-2 mx-2 rounded-lg"
                 style={{ backgroundColor: 'var(--primary-bg)' }}
               >
-                {casinoItems.map((item) => (
-                  <div
-                    key={item.name}
-                    onClick={() => handleLinkClick(item.name)}
-                    className={`cursor-pointer py-2 mx-2 my-1 rounded-lg min-h-[40px] transition-all duration-200 border-l-4 flex items-center`}
-                    style={{
-                      background: activeLink === item.name 
-                        ? 'linear-gradient(90deg, var(--active-bg), var(--tertiary-bg))'
-                        : 'transparent',
-                      boxShadow: activeLink === item.name 
-                        ? '0 2px 8px var(--shadow-purple), inset 0 1px 0 var(--border-light)'
-                        : 'none',
-                      borderLeftColor: activeLink === item.name ? 'var(--accent-purple)' : 'transparent'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (activeLink !== item.name) {
-                        e.target.style.backgroundColor = 'var(--hover-bg)'
-                        e.target.style.borderLeftColor = 'var(--accent-purple-light)'
-                        e.target.style.boxShadow = '0 4px 12px var(--shadow-purple), 0 2px 4px var(--shadow-dark)'
-                        e.target.style.transform = 'translateX(4px)'
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (activeLink !== item.name) {
-                        e.target.style.backgroundColor = 'transparent'
-                        e.target.style.borderLeftColor = 'transparent'
-                        e.target.style.boxShadow = 'none'
-                        e.target.style.transform = 'translateX(0)'
-                      }
-                    }}
-                  >
-                    <div 
-                      className="flex items-center justify-center w-12 h-8 text-base transition-all duration-200"
-                      style={{ 
-                        color: activeLink === item.name ? 'var(--accent-purple-light)' : 'var(--text-medium)'
+                {casinoItems.map((item) => {
+                  const isActive = isLinkActive(item.path)
+                  return (
+                    <div
+                      key={item.name}
+                      onClick={() => handleLinkClick(item.path)}
+                      className={`cursor-pointer py-2 mx-2 my-1 rounded-lg min-h-[40px] transition-all duration-200 border-l-4 flex items-center`}
+                      style={{
+                        background: isActive 
+                          ? 'linear-gradient(90deg, var(--active-bg), var(--tertiary-bg))'
+                          : 'transparent',
+                        boxShadow: isActive 
+                          ? '0 2px 8px var(--shadow-purple), inset 0 1px 0 var(--border-light)'
+                          : 'none',
+                        borderLeftColor: isActive ? 'var(--accent-purple)' : 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          e.target.style.backgroundColor = 'var(--hover-bg)'
+                          e.target.style.borderLeftColor = 'var(--accent-purple-light)'
+                          e.target.style.boxShadow = '0 4px 12px var(--shadow-purple), 0 2px 4px var(--shadow-dark)'
+                          e.target.style.transform = 'translateX(4px)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          e.target.style.backgroundColor = 'transparent'
+                          e.target.style.borderLeftColor = 'transparent'
+                          e.target.style.boxShadow = 'none'
+                          e.target.style.transform = 'translateX(0)'
+                        }
                       }}
                     >
-                      {item.icon}
+                      <div 
+                        className="flex items-center justify-center w-12 h-8 text-base transition-all duration-200"
+                        style={{ 
+                          color: isActive ? 'var(--accent-purple-light)' : 'var(--text-medium)'
+                        }}
+                      >
+                        {item.icon}
+                      </div>
+                      <span 
+                        className={`text-xs ml-2 ${isActive ? 'font-semibold' : 'font-normal'}`}
+                        style={{ 
+                          color: isActive ? 'var(--text-light)' : 'var(--text-medium)'
+                        }}
+                      >
+                        {item.name}
+                      </span>
                     </div>
-                    <span 
-                      className={`text-xs ml-2 ${activeLink === item.name ? 'font-semibold' : 'font-normal'}`}
-                      style={{ 
-                        color: activeLink === item.name ? 'var(--text-light)' : 'var(--text-medium)'
-                      }}
-                    >
-                      {item.name}
-                    </span>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
 
@@ -277,68 +337,71 @@ export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = fals
                 className="py-2 mx-2 rounded-lg"
                 style={{ backgroundColor: 'var(--primary-bg)' }}
               >
-                {originalsItems.map((item) => (
-                  <div
-                    key={item.name}
-                    onClick={() => handleLinkClick(item.name)}
-                    className={`cursor-pointer py-2 mx-2 my-1 rounded-lg min-h-[40px] transition-all duration-200 border-l-4 flex items-center`}
-                    style={{
-                      background: activeLink === item.name 
-                        ? 'linear-gradient(90deg, var(--active-bg), var(--tertiary-bg))'
-                        : 'transparent',
-                      boxShadow: activeLink === item.name 
-                        ? '0 2px 8px var(--shadow-purple), inset 0 1px 0 var(--border-light)'
-                        : 'none',
-                      borderLeftColor: activeLink === item.name ? 'var(--accent-purple)' : 'transparent'
-                    }}
-                    onMouseEnter={(e) => {
-                      if (activeLink !== item.name) {
-                        e.target.style.backgroundColor = 'var(--hover-bg)'
-                        e.target.style.borderLeftColor = 'var(--accent-purple-light)'
-                        e.target.style.boxShadow = '0 4px 12px var(--shadow-purple), 0 2px 4px var(--shadow-dark)'
-                        e.target.style.transform = 'translateX(4px)'
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (activeLink !== item.name) {
-                        e.target.style.backgroundColor = 'transparent'
-                        e.target.style.borderLeftColor = 'transparent'
-                        e.target.style.boxShadow = 'none'
-                        e.target.style.transform = 'translateX(0)'
-                      }
-                    }}
-                  >
-                    <div 
-                      className="flex items-center justify-center w-12 h-8 text-base transition-all duration-200"
-                      style={{ 
-                        color: activeLink === item.name ? 'var(--accent-purple-light)' : 'var(--text-medium)'
+                {originalsItems.map((item) => {
+                  const isActive = isLinkActive(item.path)
+                  return (
+                    <div
+                      key={item.name}
+                      onClick={() => handleLinkClick(item.path)}
+                      className={`cursor-pointer py-2 mx-2 my-1 rounded-lg min-h-[40px] transition-all duration-200 border-l-4 flex items-center`}
+                      style={{
+                        background: isActive 
+                          ? 'linear-gradient(90deg, var(--active-bg), var(--tertiary-bg))'
+                          : 'transparent',
+                        boxShadow: isActive 
+                          ? '0 2px 8px var(--shadow-purple), inset 0 1px 0 var(--border-light)'
+                          : 'none',
+                        borderLeftColor: isActive ? 'var(--accent-purple)' : 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          e.target.style.backgroundColor = 'var(--hover-bg)'
+                          e.target.style.borderLeftColor = 'var(--accent-purple-light)'
+                          e.target.style.boxShadow = '0 4px 12px var(--shadow-purple), 0 2px 4px var(--shadow-dark)'
+                          e.target.style.transform = 'translateX(4px)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          e.target.style.backgroundColor = 'transparent'
+                          e.target.style.borderLeftColor = 'transparent'
+                          e.target.style.boxShadow = 'none'
+                          e.target.style.transform = 'translateX(0)'
+                        }
                       }}
                     >
-                      {item.icon}
-                    </div>
-                    <div className="flex items-center gap-2 ml-2">
-                      <span 
-                        className={`text-xs ${activeLink === item.name ? 'font-semibold' : 'font-normal'}`}
+                      <div 
+                        className="flex items-center justify-center w-12 h-8 text-base transition-all duration-200"
                         style={{ 
-                          color: activeLink === item.name ? 'var(--text-light)' : 'var(--text-medium)'
+                          color: isActive ? 'var(--accent-purple-light)' : 'var(--text-medium)'
                         }}
                       >
-                        {item.name}
-                      </span>
-                      {item.isNew && (
+                        {item.icon}
+                      </div>
+                      <div className="flex items-center gap-2 ml-2">
                         <span 
-                          className="text-xs px-2 py-0.5 rounded-md font-bold"
+                          className={`text-xs ${isActive ? 'font-semibold' : 'font-normal'}`}
                           style={{ 
-                            backgroundColor: 'var(--success-green)', 
-                            color: 'var(--primary-bg)'
+                            color: isActive ? 'var(--text-light)' : 'var(--text-medium)'
                           }}
                         >
-                          New
+                          {item.name}
                         </span>
-                      )}
+                        {item.isNew && (
+                          <span 
+                            className="text-xs px-2 py-0.5 rounded-md font-bold"
+                            style={{ 
+                              backgroundColor: 'var(--success-green)', 
+                              color: 'var(--primary-bg)'
+                            }}
+                          >
+                            New
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>
@@ -352,7 +415,7 @@ export default function Sidebar({ sidebarOpen = true, isDesktop, isMobile = fals
           <div>
             {renderNavItem({ name: 'Reward', icon: <FiGift />, path: '/reward' }, handleLinkClick)}
             
-            {renderNavItem({ name: 'Live Support', icon: <FiHeadphones />, path: '/support' }, handleLinkClick)}
+            {renderButtonItem({ name: 'Live Support', icon: <FiHeadphones /> }, onToggleLiveSupport)}
 
             {/* Language Dropdown */}
             {renderDropdownHeader(
