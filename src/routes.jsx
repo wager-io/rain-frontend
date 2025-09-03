@@ -8,6 +8,7 @@ const ComingSoon = lazy(() => import('./pages/sport/Index'));
 const CasinoIndex = lazy(() => import('./pages/casino/Index'));
 const Favourite = lazy(() => import('./pages/Favourite/Index'));
 const Recents = lazy(() => import('./pages/recent/Index'));
+const Reward = lazy(() => import('./pages/rewards/Index'));
 
 
 export const routes = [
@@ -44,6 +45,13 @@ export const routes = [
     path: '/recent',
     element: <Recents /> ,
     name: 'Favourite',
+    showInNav: true,
+    protected: true,
+  },
+     {
+    path: '/reward',
+    element: <Reward /> ,
+    name: 'Reward',
     showInNav: true,
     protected: true,
   },

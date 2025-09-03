@@ -3,8 +3,6 @@ import React from 'react'
 export default function GameCard() {
   return (
       <div className="flex flex-col md:flex-row gap-3 mb-8">
-        
-        {/* Crash Game Card */}
         <div 
           className="relative flex-1 h-42 md:h-42 lg:h-42 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105"
           style={{
